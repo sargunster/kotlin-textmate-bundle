@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/bin/bash
+if [ -f "./kotlin.sh" ]; then
+   /bin/sh ./kotlin.sh
+else
+	cd "$TM_DIRECTORY"
+	JAVA8="$(ls /Library/Java/JavaVirtualMachines|grep jdk1.8|awk '{ print "/Library/Java/JavaVirtualMachines/" $1 "/Contents/Home"}')"
+	if [ -z "$JAVA8" ]; then
+		echo "No java 8 jdk found..."
+		exit 1
+	fi
+	if [ "${TM_FILENAME##*.}" = "kts" ]; then
+		JAVA_HOME=${JAVA8} /usr/local/bin/kotlinc -script "$TM_FILENAME"
+	else
+        JAVA_HOME=${JAVA8} /usr/local/bin/kotlinc "$TM_FILENAME"
+        class=${TM_FILENAME%.kt}
+        class="$(tr '[:lower:]' '[:upper:]' &lt;&lt;&lt; ${class:0:1})${class:1}"
+        class="${class}Kt"
+        JAVA_HOME=${JAVA8} /usr/local/bin/kotlin "${class}"
+        rm -rf META-INF "${class}".class
+	fi
+fi
+	
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Compile &amp; Run</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>text</string>
+	<key>outputLocation</key>
+	<string>toolTip</string>
+	<key>scope</key>
+	<string>source.Kotlin</string>
+	<key>uuid</key>
+	<string>93E74DFB-1E1F-44BA-81B7-E67D7D59A713</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>

@@ -624,24 +624,24 @@
 					<key>name</key>
 					<string>keyword.operator.arithmetic.kotlin</string>
 				</dict>
-                <dict>
-                    <key>match</key>
-                    <string>(\+=|\-=|\*=|\/=)</string>
-                    <key>name</key>
-                    <string>keyword.operator.arithmetic.assign.kotlin</string>
-                </dict>
+				<dict>
+					<key>match</key>
+					<string>(\+=|\-=|\*=|\/=)</string>
+					<key>name</key>
+					<string>keyword.operator.arithmetic.assign.kotlin</string>
+				</dict>
 				<dict>
 					<key>match</key>
 					<string>(!|&amp;&amp;|\|\|)</string>
 					<key>name</key>
 					<string>keyword.operator.logical.kotlin</string>
 				</dict>
-                <dict>
-                    <key>match</key>
-                    <string>(\.\.)</string>
-                    <key>name</key>
-                    <string>keyword.operator.range.kotlin</string>
-                </dict>
+				<dict>
+					<key>match</key>
+					<string>(\.\.)</string>
+					<key>name</key>
+					<string>keyword.operator.range.kotlin</string>
+				</dict>
 				<dict>
 					<key>match</key>
 					<string>(;)</string>
@@ -1157,6 +1157,8 @@
 			</array>
 		</dict>
 	</dict>
+	<key>scope</key>
+	<string>source.Kotlin</string>
 	<key>scopeName</key>
 	<string>source.Kotlin</string>
 	<key>uuid</key>

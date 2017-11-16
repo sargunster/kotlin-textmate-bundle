@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/bin/bash
+#https://manual.macromates.com/en/commands
+[[ -f "${TM_SUPPORT_PATH}/lib/bash_init.sh" ]] &amp;&amp; . "${TM_SUPPORT_PATH}/lib/bash_init.sh"
+
+res=$(CocoaDialog inputbox --title "Input" \
+    --informative-text "Please provide arguments:" \
+    --button1 "Ok" --button2 "Cancel")
+[[ $(head -n1 &lt;&lt;&lt;"$res") == "2" ]] &amp;&amp; exit_discard
+res=$(tail -n1 &lt;&lt;&lt;"$res")
+
+if [ -f "./kotlin.sh" ]; then
+	#if kotlin.sh exists in the folder where the file resides that will be used as run job
+   /bin/sh ./kotlin.sh $res
+else
+	cd "$TM_DIRECTORY"
+	JAVA8="$(ls /Library/Java/JavaVirtualMachines|grep jdk1.8|awk '{ print "/Library/Java/JavaVirtualMachines/" $1 "/Contents/Home"}')"
+	if [ -z "$JAVA8" ]; then
+		echo "No java 8 jdk found..."
+		exit 1
+	fi
+	if [ "${TM_FILENAME##*.}" = "kts" ]; then
+		#interpret a kts script
+		JAVA_HOME=${JAVA8} /usr/local/bin/kotlinc -script "$TM_FILENAME" $res
+	else
+		#compile and run the file as a main
+        JAVA_HOME=${JAVA8} /usr/local/bin/kotlinc "$TM_FILENAME"
+        class=${TM_FILENAME%.kt}
+        class="$(tr '[:lower:]' '[:upper:]' &lt;&lt;&lt; ${class:0:1})${class:1}"
+        class="${class}Kt"
+        JAVA_HOME=${JAVA8} /usr/local/bin/kotlin "${class}" $res
+        rm -rf META-INF "${class}".class
+	fi
+fi
+	
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>keyEquivalent</key>
+	<string>~@r</string>
+	<key>name</key>
+	<string>Compile &amp; Run (with args)</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>text</string>
+	<key>outputLocation</key>
+	<string>toolTip</string>
+	<key>scope</key>
+	<string>source.Kotlin</string>
+	<key>uuid</key>
+	<string>41D7AD36-0E9C-401F-8E98-E676ADD1447D</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>
